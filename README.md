@@ -13,3 +13,7 @@ From the Mike's Note :
 > You are free to modify and/or distribute this script as you wish.  I only ask that you maintain original
 > author attribution and not attempt to sell it or incorporate it into any commercial offering (as if it's 
 > worth anything anyway :)
+
+
+[MC]: <https://twitter.com/SecuritySift>
+[Recon]: <www.securitysift.com/download/recon_scan.zip>
