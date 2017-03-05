@@ -18,14 +18,16 @@ fi
 printf "\n${RED}[+]Curl Get...${NOCOLOUR}\n\n"
 curl -is http://$1:$2 | tee -a $dirName/curlGet.txt
 
-printf "\n${RED}[+]Curl Options...${NOCOLOUR}\n\n"
-curl -s -X OPTIONS -D - http://$1:$2  -o /dev/null | tee -a .$dirName/curlOptions.txt
+printf "\n${RED}[+]Running NMap HTTP Enumeration${NOCOLOUR}\n\n"
+nmap --script=http-enum $1 | tee -a $dirName/http-enum.txt
 
 printf "\n${RED}[+]Running GoBuster...${NOCOLOUR}\n\n"
 gobuster -u http://$1:$2 -w /usr/share/wordlists/dirb/big.txt -x $3 | tee -a $dirName/gobuster-search.txt
- 
-printf "\n${RED}[+]Running NMap HTTP Enumeration${NOCOLOUR}\n\n"
-nmap --script=http-enum $1 | tee -a $dirName/http-enum.txt
+
+printf "\n${RED}[+]Running HTTP Methods Fuzz...${NOCOLOUR}\n\n"
+while read p; do
+	nmap -p $2 $1 --script http-methods.nse  --script-args http-methods.url-path=$p
+done < <(grep ^/ ./httpEnum-$1/gobuster-search.txt | awk '{print $1}')
  
 printf "\n${RED}[+]Running Nikto Vulnerability Assessment${NOCOLOUR}\n\n"
 nikto -h http://$1:$2 | tee -a  $dirName/nikto.txt
